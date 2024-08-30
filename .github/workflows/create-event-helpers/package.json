@@ -3,9 +3,9 @@
   "description": "This code is responsible for handling automation of meetings creation",
   "license": "Apache 2.0",
   "dependencies": {
-    "@actions/core": "^1.6.0",
+    "@actions/core": "^1.9.1",
     "@mailchimp/mailchimp_marketing": "^3.0.74",
     "googleapis": "^99.0.0",
-    "node-fetch": "2.6.1"
+    "node-fetch": "2.7.0"
   }
 }
