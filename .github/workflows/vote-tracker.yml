@@ -1,0 +1,49 @@
+name: Vote Tracker
+
+on:
+  issue_comment:
+    types: [created]
+
+  workflow_dispatch: {}
+
+jobs:
+  track-vote:
+    if: ${{ github.actor == 'git-vote[bot]' && contains(github.event.comment.body, 'Vote closed') || github.event_name == 'workflow_dispatch' }}
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Installing Module
+        run: npm install js-yaml@4.1.0 --no-save
+        shell: bash
+
+      - name: Run GitHub Script
+        id: vote_tracker
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const script = require('./.github/scripts/vote_tracker/index.js');
+            await script({ github, context });
+
+      - name: Create Pull Request to update Vote Tracking Details
+        uses: peter-evans/create-pull-request@153407881ec5c347639a548ade7d8ad1d6740e38 # uses 5.0.2 https://github.com/peter-evans/create-pull-request/releases/tag/v5.0.2
+        with:
+          token: ${{ secrets.GH_TOKEN }}
+          commit-message: 'chore: update vote tracking details'
+          committer: asyncapi-bot <info@asyncapi.io>
+          author: asyncapi-bot <info@asyncapi.io>
+          title: 'chore: vote tracking details'
+          body: |
+            Updates the following files after a full refresh of all closed vote issues:
+            - `voteTrackingFile.json` — rebuilt from scratch with current TSC members only
+            - `docs/020-governance-and-policies/TSC_VOTING_OVERVIEW.md` — regenerated markdown table
+
+            If any TSC member was inactive in the **last 3 consecutive votes**, this PR also includes:
+            - `MAINTAINERS.yaml` — `isTscMember` set to `false` for inactive members
+            - `TSC_BOARD_MEMBERS.yaml` — `isTscMember` set to `false` for inactive members
+            - `Emeritus.yaml` — inactive member handles appended to `emeritus_tsc`
+
+            Please review the diff carefully before merging, especially if membership changes are included.
+          branch: vote-trackingupdate/${{ github.job }}

@@ -1,8 +1,38 @@
-# This file lists individuals who were previously TSC members but are no longer active.
-emeritus:
-  - jotamusik 
+# This file lists individuals who were previously Ambassadors and TSC members but are no longer active.
+
+emeritus_ambassadors:
+  - jessemenning
+  - meteatamel
+  - raphaeldelio
+  - ferror
+  - quetzalliwrites
+  - manuelottlik
+  - lornajane
+emeritus_tsc:
+  - jotamusik
   - LouisXhaferi
   - aeworxet
   - arjungarg07
   - boyney123
   - Barbanio
+  - mcturco
+  - damaru-inc
+  - geraldloeffler
+  - ron-debajyoti
+  - char0n
+  - kieranm1999
+  - jefflufc
+  - lewis-relph
+  - emilianozublena
+  - NektariosFifes
+  - M3lkior
+  - anandsunderraman
+  - lbroudoux
+  - CameronRushton
+  - smoya
+  - GreenRover
+  - KhudaDad414
+  - dan-r
+  - VisualBean
+  - sambhavgupta0705
+  - Ruchip16

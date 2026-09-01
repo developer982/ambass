@@ -62,14 +62,6 @@ on:
         required: true
       CALENDAR_SERVICE_ACCOUNT:
         required: true
-      TWITTER_CONSUMER_KEY:
-        required: true
-      TWITTER_CONSUMER_SECRET:
-        required: true
-      TWITTER_ACCESS_TOKEN_KEY:
-        required: true
-      TWITTER_ACCESS_TOKEN_SECRET:
-        required: true
 
 jobs:
   setup-meeting:
@@ -102,9 +94,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
       - name: Setup Node.js
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
-          node-version: 16
+          node-version: 22
           cache: 'npm'
           cache-dependency-path: '**/package-lock.json'
       - name: Install deps
@@ -121,7 +113,7 @@ jobs:
             const setupZoom = require('./.github/workflows/create-event-helpers/zoom/index.js');
             setupZoom('${{ inputs.date }}', '${{ inputs.time }}', '${{ inputs.host }}', '${{ inputs.alternative_host }}');
       - name: Create issue with meeting details
-        uses: JasonEtco/create-an-issue@v2
+        uses: JasonEtco/create-an-issue@1b14a70e4d8dc185e5cc76d3bec9eab20257b2c5 # version v2 https://github.com/JasonEtco/create-an-issue/tree/v2/
         id: create-issue
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
@@ -147,11 +139,3 @@ jobs:
           script: |
             const { addEvent } = require('./.github/workflows/create-event-helpers/calendar/index.js');
             addEvent('${{ steps.zoom.outputs.meetingUrl }}', '${{ inputs.date }}', '${{ inputs.time }}', '${{ steps.create-issue.outputs.number }}');
-      - name: Publish information about meeting to Twitter
-        uses: m1ner79/Github-Twittction@v1.0.1
-        with:
-          twitter_status: "New meeting scheduled 💪\n\nName: ${{ inputs.meeting_name }}\n\nCheck what is it about and how to connect 👇🏼 https://github.com/asyncapi/community/issues/${{ steps.create-issue.outputs.number }}"
-          twitter_consumer_key: ${{ secrets.TWITTER_CONSUMER_KEY }}
-          twitter_consumer_secret: ${{ secrets.TWITTER_CONSUMER_SECRET }}
-          twitter_access_token_key: ${{ secrets.TWITTER_ACCESS_TOKEN_KEY }}
-          twitter_access_token_secret: ${{ secrets.TWITTER_ACCESS_TOKEN_SECRET }}
